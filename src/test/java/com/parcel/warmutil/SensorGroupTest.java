@@ -2,7 +2,7 @@ package com.parcel.warmutil;
 
 
 import com.parcel.warmutil.model.SensorGroup;
-import com.parcel.warmutil.model.SensorTempRange;
+import com.parcel.warmutil.model.helpers.SensorTempRange;
 import com.parcel.warmutil.model.helpers.RelayPosition;
 import com.parcel.warmutil.model.helpers.WarmingState;
 import org.junit.Test;

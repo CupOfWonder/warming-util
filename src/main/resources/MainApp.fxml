@@ -45,15 +45,18 @@
                 <VBox spacing="10">
                     <padding><Insets top="25" right="25" bottom="25" left="25"/></padding>
                     <Label text="Установить пределы температуры для каждого датчика" />
-                    <TableView prefHeight="300.0" prefWidth="800.0" fx:id="tempOptionsTable">
+                    <TableView prefHeight="300.0" prefWidth="800.0" fx:id="tempOptionsTable" editable="true" >
                         <columns>
-                            <TableColumn sortable="false" resizable="false" prefWidth="175" text="№ группы"/>
-                            <TableColumn sortable="false" resizable="false" prefWidth="300" text="Минимальная темп-ра группы"/>
-                            <TableColumn sortable="false" resizable="false" prefWidth="300" text="Максимальная темп-ра группы"/>
+                            <TableColumn sortable="false" resizable="false" editable="false" prefWidth="175"
+                                         text="№ группы" fx:id="tempGroupNum"/>
+                            <TableColumn sortable="false" resizable="false" editable="true" prefWidth="300"
+                                         text="Минимальная темп-ра группы" fx:id="tempMin"/>
+                            <TableColumn sortable="false" resizable="false" editable="true" prefWidth="300"
+                                         text="Максимальная темп-ра группы" fx:id="tempMax"/>
                         </columns>
                     </TableView>
                     <HBox spacing="5">
-                        <Button text="Применить" minWidth="100" />
+                        <Button text="Применить" minWidth="100" onMouseClicked="#onTempOptionsConfirmed"/>
                         <Button text="Отменить изменения" minWidth="100" />
                     </HBox>
                 </VBox>
@@ -66,9 +69,12 @@
                     <Label text="Установить поправку для каждого датчика" />
                     <TableView prefHeight="300.0" prefWidth="800.0" fx:id="calibrationTable">
                         <columns>
-                            <TableColumn sortable="false" resizable="false" prefWidth="175" text="№ группы"/>
-                            <TableColumn sortable="false" resizable="false" prefWidth="300" text="Поправка к темп-ре левого датчика"/>
-                            <TableColumn sortable="false" resizable="false" prefWidth="300" text="Поправка к темп-ре правого датчика"/>
+                            <TableColumn sortable="false" resizable="false" prefWidth="175"
+                                         text="№ группы" fx:id="calibrationGroupNum"/>
+                            <TableColumn sortable="false" resizable="false" prefWidth="300"
+                                         text="Поправка к темп-ре левого датчика" fx:id="calibrationLeftSensor"/>
+                            <TableColumn sortable="false" resizable="false" prefWidth="300"
+                                         text="Поправка к темп-ре правого датчика" fx:id="calibrationRightSensor"/>
                         </columns>
                     </TableView>
                     <HBox spacing="5">

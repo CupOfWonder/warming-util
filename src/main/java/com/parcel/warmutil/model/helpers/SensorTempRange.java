@@ -1,4 +1,4 @@
-package com.parcel.warmutil.model;
+package com.parcel.warmutil.model.helpers;
 
 public class SensorTempRange {
 	private int minTemp;
@@ -15,5 +15,13 @@ public class SensorTempRange {
 
 	public int getMaxTemp() {
 		return maxTemp;
+	}
+
+	public void setMinTemp(int minTemp) {
+		this.minTemp = minTemp;
+	}
+
+	public void setMaxTemp(int maxTemp) {
+		this.maxTemp = maxTemp;
 	}
 }

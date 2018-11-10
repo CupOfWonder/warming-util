@@ -1,6 +1,7 @@
 package com.parcel.warmutil.model;
 
 import com.parcel.warmutil.model.helpers.RelayPosition;
+import com.parcel.warmutil.model.helpers.SensorTempRange;
 import com.parcel.warmutil.model.helpers.WarmingState;
 
 public class SensorGroup {
@@ -90,5 +91,17 @@ public class SensorGroup {
 
 	public Integer getRightTemp() {
 		return rightSensor.getRealTemp();
+	}
+
+	public int getRelayNumber() {
+		return relayNumber;
+	}
+
+	public int getLeftSensorPin() {
+		return leftSensorPin;
+	}
+
+	public int getRightSensorPin() {
+		return rightSensorPin;
 	}
 }
