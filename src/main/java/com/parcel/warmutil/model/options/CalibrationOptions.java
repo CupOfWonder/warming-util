@@ -5,8 +5,16 @@ public class CalibrationOptions {
 	private int leftCalibration;
 	private int rightCalibration;
 
+	public CalibrationOptions() {}
+
 	public CalibrationOptions(int groupNumber) {
 		this.groupNumber = groupNumber;
+	}
+
+	public CalibrationOptions(int groupNumber, int leftCalibration, int rightCalibration) {
+		this.groupNumber = groupNumber;
+		this.leftCalibration = leftCalibration;
+		this.rightCalibration = rightCalibration;
 	}
 
 	public int getGroupNumber() {
@@ -31,5 +39,9 @@ public class CalibrationOptions {
 
 	public void setRightCalibration(int rightCalibration) {
 		this.rightCalibration = rightCalibration;
+	}
+
+	public CalibrationOptions copy() {
+		return new CalibrationOptions(this.groupNumber, this.leftCalibration, this.rightCalibration);
 	}
 }

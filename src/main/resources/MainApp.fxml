@@ -57,7 +57,7 @@
                     </TableView>
                     <HBox spacing="5">
                         <Button text="Применить" minWidth="100" onMouseClicked="#onTempOptionsConfirmed"/>
-                        <Button text="Отменить изменения" minWidth="100" />
+                        <Button text="Отменить изменения" minWidth="100" onMouseClicked="#onTempOptionsCancelled"/>
                     </HBox>
                 </VBox>
             </content>
@@ -78,8 +78,8 @@
                         </columns>
                     </TableView>
                     <HBox spacing="5">
-                        <Button text="Применить" minWidth="100" />
-                        <Button text="Отменить изменения" minWidth="100" />
+                        <Button text="Применить" minWidth="100" onMouseClicked="#onCalibrationOptionsConfirmed"/>
+                        <Button text="Отменить изменения" minWidth="100" onMouseClicked="#onCalibrationOptionsCancelled"/>
                     </HBox>
                 </VBox>
             </content>

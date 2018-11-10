@@ -77,9 +77,7 @@ public abstract class SpinnerEditableCell<S> extends TableCell<S, Integer> imple
 
 	@Override
 	public void cancelEdit() {
-		super.cancelEdit();
-		setText(itemToString(getItem()));
-		setContentDisplay(ContentDisplay.TEXT_ONLY);
+		commitEdit();	//Необходимо, чтобы значение подтверждалось при любой отмене
 	}
 
 

@@ -7,11 +7,6 @@ import static com.parcel.warmutil.client.helpers.StringHelper.temperatureString;
 
 public class TemperatureEditCell extends SpinnerEditableCell<TempRangeOptions> {
 
-	public TemperatureEditCell() {
-		super();
-
-	}
-
 	@Override
 	public String itemToString(Integer item) {
 		return temperatureString(item);

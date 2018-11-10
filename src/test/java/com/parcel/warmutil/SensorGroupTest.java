@@ -2,7 +2,6 @@ package com.parcel.warmutil;
 
 
 import com.parcel.warmutil.model.SensorGroup;
-import com.parcel.warmutil.model.helpers.SensorTempRange;
 import com.parcel.warmutil.model.helpers.RelayPosition;
 import com.parcel.warmutil.model.helpers.WarmingState;
 import org.junit.Test;
@@ -14,7 +13,7 @@ public class SensorGroupTest {
 	@Test
 	public void warmTest() {
 		SensorGroup group = new SensorGroup(1,1, 1);
-		group.setTempRange(new SensorTempRange(180, 220));
+		group.setTempRange(180, 220);
 		group.setSensorTempValues(0, 0);
 
 		assertEquals(WarmingState.WARMING, group.getState());
@@ -24,7 +23,7 @@ public class SensorGroupTest {
 	@Test
 	public void sustainTest() {
 		SensorGroup group = new SensorGroup(1, 1, 1);
-		group.setTempRange(new SensorTempRange(180, 220));
+		group.setTempRange(180, 220);
 		group.setSensorTempValues(50, 50);
 
 		assertEquals(WarmingState.WARMING, group.getState());
@@ -36,7 +35,7 @@ public class SensorGroupTest {
 	@Test
 	public void coolTest() {
 		SensorGroup group = new SensorGroup(1,1,1);
-		group.setTempRange(new SensorTempRange(180, 220));
+		group.setTempRange(180, 220);
 		group.setSensorTempValues(300, 200);
 
 		assertEquals(WarmingState.COOLING, group.getState());

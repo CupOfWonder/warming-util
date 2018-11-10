@@ -65,8 +65,8 @@ public class SensorGroup {
 		rightSensor.setCorrection(rightCorrection);
 	}
 
-	public void setTempRange(SensorTempRange tempRange) {
-		this.tempRange = tempRange;
+	public void setTempRange(int minTemp, int maxTemp) {
+		this.tempRange = new SensorTempRange(minTemp, maxTemp);
 	}
 
 	public WarmingState getState() {

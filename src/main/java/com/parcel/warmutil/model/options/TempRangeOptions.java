@@ -5,8 +5,16 @@ public class TempRangeOptions {
 	private int minTemp;
 	private int maxTemp;
 
+	public TempRangeOptions() {}
+
 	public TempRangeOptions(int groupNumber) {
 		this.groupNumber = groupNumber;
+	}
+
+	public TempRangeOptions(int groupNumber, int minTemp, int maxTemp) {
+		this.groupNumber = groupNumber;
+		this.minTemp = minTemp;
+		this.maxTemp = maxTemp;
 	}
 
 	public int getGroupNumber() {
@@ -37,5 +45,9 @@ public class TempRangeOptions {
 		if(maxTemp < minTemp) {
 			minTemp = maxTemp;
 		}
+	}
+
+	public TempRangeOptions copy() {
+		return new TempRangeOptions(groupNumber, minTemp, maxTemp);
 	}
 }

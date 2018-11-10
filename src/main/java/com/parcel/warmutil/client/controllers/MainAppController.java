@@ -13,9 +13,11 @@ import com.parcel.warmutil.model.options.TempRangeOptions;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.input.MouseEvent;
 
 import java.util.List;
@@ -107,30 +109,24 @@ public class MainAppController {
 				cellData.getValue().getMinTemp())
 		);
 		tempMin.setCellFactory(cellData -> new TemperatureEditCell());
-		tempMin.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<TempRangeOptions, Integer>>() {
-			@Override
-			public void handle(TableColumn.CellEditEvent<TempRangeOptions, Integer> event) {
-				event.getRowValue().setMinTemp(event.getNewValue());
-				tempOptionsTable.refresh();
-			}
+		tempMin.setOnEditCommit(event -> {
+			event.getRowValue().setMinTemp(event.getNewValue());
+			tempOptionsTable.refresh();
 		});
 		tempMax.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<>(
 				cellData.getValue().getMaxTemp())
 		);
 		tempMax.setCellFactory(cellData -> new TemperatureEditCell());
-		tempMax.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<TempRangeOptions, Integer>>() {
-			@Override
-			public void handle(TableColumn.CellEditEvent<TempRangeOptions, Integer> event) {
-				event.getRowValue().setMaxTemp(event.getNewValue());
-				tempOptionsTable.refresh();
-			}
+		tempMax.setOnEditCommit(event -> {
+			event.getRowValue().setMaxTemp(event.getNewValue());
+			tempOptionsTable.refresh();
 		});
 	}
 
 	//Таблица "Калибровка датчиков"
 	private void initCalibrationTable() {
 		calibrationTable.getSelectionModel().setCellSelectionEnabled(true);
-		calibrationTable.setItems(tempCalibrationOptionsObservableList());
+		calibrationTable.setItems(calibrationOptionsObservableList());
 
 		//Колонка "№ группы"
 		calibrationGroupNum.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<>(
@@ -164,28 +160,50 @@ public class MainAppController {
 	}
 
 	private ObservableList<TempRangeOptions> tempOptionsObservableList() {
-		List<SensorGroup> groups = programState.getAllGroups();
-		List<TempRangeOptions> options = groups.stream().map(
-				group -> new TempRangeOptions(group.getGroupNumber())
-		).collect(Collectors.toList());
-		return FXCollections.observableList(options);
+		List<TempRangeOptions> currentTempOptions = programState.getCurrentOptions().getTempRangeOptions();
+
+		return FXCollections.observableList(cloneTempOptions(currentTempOptions));
 	}
 
-	private ObservableList<CalibrationOptions> tempCalibrationOptionsObservableList() {
-		List<SensorGroup> groups = programState.getAllGroups();
-		List<CalibrationOptions> options = groups.stream().map(
-				group -> new CalibrationOptions(group.getGroupNumber())
-		).collect(Collectors.toList());
-		return FXCollections.observableList(options);
+	private ObservableList<CalibrationOptions> calibrationOptionsObservableList() {
+		List<CalibrationOptions> currentCalibrationOptions = programState.getCurrentOptions().getCalibrationOptions();
+		return FXCollections.observableList(cloneCalibrationOptions(currentCalibrationOptions));
 	}
 
 	public void onTempOptionsConfirmed(MouseEvent mouseEvent) {
 		editFinisher.finishEdit();
+		programState.applyTempRangeToCurrentOptions(cloneTempOptions(tempOptionsTable.getItems()));
+		programState.saveCurrentOptions();
+	}
+
+	private List<TempRangeOptions> cloneTempOptions(List<TempRangeOptions> options) {
+		return options.stream().map(TempRangeOptions::copy).collect(Collectors.toList());
+	}
+
+	private List<CalibrationOptions> cloneCalibrationOptions(List<CalibrationOptions> options) {
+		return options.stream().map(CalibrationOptions::copy).collect(Collectors.toList());
+	}
+
+	public void onCalibrationOptionsConfirmed(MouseEvent mouseEvent) {
+		editFinisher.finishEdit();
+		programState.applyNewCalibrationToOptions(cloneCalibrationOptions(calibrationTable.getItems()));
+		programState.saveCurrentOptions();
+	}
+
+	public void onCalibrationOptionsCancelled(MouseEvent mouseEvent) {
+		editFinisher.finishEdit();
+		calibrationTable.setItems(calibrationOptionsObservableList());
+	}
+
+	public void onTempOptionsCancelled(MouseEvent mouseEvent) {
+		editFinisher.finishEdit();
+		tempOptionsTable.setItems(tempOptionsObservableList());
 	}
 
 	@FXML
 	public void handleStartWarming(MouseEvent mouseEvent) {
 
 	}
+
 
 }

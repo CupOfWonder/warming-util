@@ -7,4 +7,6 @@ public class Constants {
 
 	public static final int MIN_CALIBRATION = -100;
 	public static final int MAX_CALIBRATION = 100;
+
+	public static final String OPTIONS_FILE_NAME = "options.json";
 }
