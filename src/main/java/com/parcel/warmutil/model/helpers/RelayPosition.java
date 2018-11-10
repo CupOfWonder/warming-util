@@ -11,7 +11,7 @@ public enum RelayPosition {
 		this.value = value;
 	}
 
-	public boolean isValue() {
+	public boolean isOn() {
 		return value;
 	}
 }

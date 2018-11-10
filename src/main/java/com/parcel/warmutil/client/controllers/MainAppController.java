@@ -102,9 +102,12 @@ public class MainAppController {
 		tempOptionsTable.getSelectionModel().setCellSelectionEnabled(true);
 		tempOptionsTable.setItems(tempOptionsObservableList());
 
+		//Колонка "№ группы"
 		tempGroupNum.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<>(
 				Long.toString(cellData.getValue().getGroupNumber()))
 		);
+
+		//Колонка "Минимальная темп-ра группы"
 		tempMin.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<>(
 				cellData.getValue().getMinTemp())
 		);
@@ -113,6 +116,8 @@ public class MainAppController {
 			event.getRowValue().setMinTemp(event.getNewValue());
 			tempOptionsTable.refresh();
 		});
+
+		//Колонка "Максимальная темп-ра группы"
 		tempMax.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<>(
 				cellData.getValue().getMaxTemp())
 		);
@@ -200,9 +205,12 @@ public class MainAppController {
 		tempOptionsTable.setItems(tempOptionsObservableList());
 	}
 
-	@FXML
-	public void handleStartWarming(MouseEvent mouseEvent) {
+	public void onStartClick(MouseEvent mouseEvent) {
+		programState.startWorking();
+	}
 
+	public void onStopClick(MouseEvent mouseEvent) {
+		programState.stopWorking();
 	}
 
 

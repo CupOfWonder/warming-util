@@ -34,8 +34,8 @@
                         </columns>
                     </TableView>
                     <HBox spacing="5">
-                        <Button text="Пуск" minWidth="100" fx:id="startWarming" onMouseClicked="#handleStartWarming"/>
-                        <Button text="Стоп" minWidth="100" fx:id="stopWarming" />
+                        <Button text="Пуск" minWidth="100" fx:id="startWarming" onMouseClicked="#onStartClick"/>
+                        <Button text="Стоп" minWidth="100" fx:id="stopWarming" onMouseClicked="#onStopClick"/>
                     </HBox>
                 </VBox>
             </content>

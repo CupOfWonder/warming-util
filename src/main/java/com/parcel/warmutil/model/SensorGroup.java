@@ -14,13 +14,11 @@ public class SensorGroup {
 
 	private int groupNumber;
 	private int relayNumber;
-	private int leftSensorPin;
-	private int rightSensorPin;
 
 	public SensorGroup(int relayNumber, int leftSensorPin, int rightSensorPin) {
 		this.relayNumber = relayNumber;
-		this.leftSensorPin = leftSensorPin;
-		this.rightSensorPin = rightSensorPin;
+		leftSensor.setPinNum(leftSensorPin);
+		rightSensor.setPinNum(rightSensorPin);
 	}
 
 	private void recountRelayPosition() {
@@ -97,11 +95,19 @@ public class SensorGroup {
 		return relayNumber;
 	}
 
-	public int getLeftSensorPin() {
-		return leftSensorPin;
+	public Sensor getLeftSensor() {
+		return leftSensor;
 	}
 
-	public int getRightSensorPin() {
-		return rightSensorPin;
+	public void setLeftSensor(Sensor leftSensor) {
+		this.leftSensor = leftSensor;
+	}
+
+	public Sensor getRightSensor() {
+		return rightSensor;
+	}
+
+	public void setRightSensor(Sensor rightSensor) {
+		this.rightSensor = rightSensor;
 	}
 }

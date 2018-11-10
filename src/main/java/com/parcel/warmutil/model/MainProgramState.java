@@ -1,14 +1,18 @@
 package com.parcel.warmutil.model;
 
+import com.parcel.warmutil.model.helpers.ErrorCode;
 import com.parcel.warmutil.model.helpers.StateChangeHandler;
 import com.parcel.warmutil.model.options.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import static com.parcel.warmutil.model.options.DefaultOptionsCreator.createDefaultOptions;
 
 public class MainProgramState {
+
+	private static Logger logger = Logger.getLogger("MainProgramState");
 
 	private static MainProgramState instance;
 
@@ -19,12 +23,21 @@ public class MainProgramState {
 	private int groupCount = 0;
 	private List<SensorGroup> sensorGroups = new ArrayList<>();
 
+	private Timer refreshTimer;
+	private static final int REFRESH_PERIOD = 1000;
+
+	private boolean programStated = false;
+	private volatile boolean requestingNow = false;
+
+	private BoardConnector boardConnector;
+
 	private MainProgramState() {
 		addSensorGroup(12, 1, 2);
 		addSensorGroup(13, 3, 4);
 		addSensorGroup(14, 5, 6);
 
 		tryLoadOptions();
+		boardConnector = new BoardConnector(currentOptions.getBoardName(), currentOptions.getMultiplyKoef());
 	}
 
 	private void tryLoadOptions() {
@@ -32,7 +45,7 @@ public class MainProgramState {
 		if(options != null) {
 			applyOptions(options);
 		} else {
-			createDefaultOptions();
+			currentOptions = createDefaultOptions(sensorGroups);
 		}
 	}
 
@@ -93,23 +106,6 @@ public class MainProgramState {
 		stateChangeHandlers.forEach(h -> h.onStateChange(this));
 	}
 
-	public void createDefaultOptions() {
-		ProgramOptions options = new ProgramOptions();
-
-		List<TempRangeOptions> tempOptions = new ArrayList<>();
-		List<CalibrationOptions> calibrationOptions = new ArrayList<>();
-		for(SensorGroup group : sensorGroups) {
-			TempRangeOptions to = new TempRangeOptions(group.getGroupNumber());
-			tempOptions.add(to);
-
-			CalibrationOptions co = new CalibrationOptions(group.getGroupNumber());
-			calibrationOptions.add(co);
-		}
-		options.setCalibrationOptions(calibrationOptions);
-		options.setTempRangeOptions(tempOptions);
-
-		currentOptions = options;
-	}
 
 	public void applyTempRangeToCurrentOptions(List<TempRangeOptions> tempRangeOptions) {
 		currentOptions.setTempRangeOptions(tempRangeOptions);
@@ -127,5 +123,43 @@ public class MainProgramState {
 
 	public ProgramOptions getCurrentOptions() {
 		return currentOptions;
+	}
+
+	public void startWorking() {
+		if(!boardConnector.isConnected()) {
+			boardConnector.connectToBoard();
+		}
+
+		if(boardConnector.isConnected()) {
+			refreshTimer = new Timer();
+			refreshTimer.schedule(new TimerTask() {
+				@Override
+				public void run() {
+					refreshProgramState();
+				}
+			}, 0, REFRESH_PERIOD);
+		}
+	}
+
+	public void stopWorking() {
+		refreshTimer.cancel();
+	}
+
+	public synchronized void refreshProgramState() {
+		for(SensorGroup group : sensorGroups) {
+			reloadSensor(group.getLeftSensor());
+			reloadSensor(group.getRightSensor());
+
+			boardConnector.writeRelayPosition(group.getRelayNumber(), group.getRelayPos());
+		}
+		handleStateChange();
+	}
+
+	private void reloadSensor(Sensor sensor) {
+		ErrorCode code = boardConnector.refreshSensorTemp(sensor);
+
+		if(code != ErrorCode.NO_ERROR) {
+			logger.log(Level.SEVERE, "Received error "+code+" on pin "+sensor.getPinNum());
+		}
 	}
 }

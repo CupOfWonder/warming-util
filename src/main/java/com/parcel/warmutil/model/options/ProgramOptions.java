@@ -3,7 +3,7 @@ package com.parcel.warmutil.model.options;
 import java.util.List;
 
 public class ProgramOptions {
-	private String boardName = "mainKommutator";
+	private String boardName = "test";
 	private double multiplyKoef = 1;
 	private List<TempRangeOptions> tempRangeOptions;
 	private List<CalibrationOptions> calibrationOptions;
