@@ -3,13 +3,9 @@ package com.parcel.warmutil.client;/**
  */
 
 import javafx.application.Application;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -24,7 +20,11 @@ public class MainApp extends Application {
 	public void start(Stage stage) throws IOException {
 		Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("MainApp.fxml"));
 
-		Scene scene = new Scene(root, 825, 450);
+		Scene scene = new Scene(root, 826, 450);
+		scene.getStylesheets().add(getClass().getClassLoader().getResource("MainApp.css").toExternalForm());
+
+		stage.setResizable(false);
+		stage.sizeToScene();
 
 		stage.setTitle("Управление нагревом");
 		stage.setScene(scene);

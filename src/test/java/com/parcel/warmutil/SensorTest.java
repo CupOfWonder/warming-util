@@ -12,7 +12,7 @@ public class SensorTest {
 		sensor.setTempOnSensor(200);
 		sensor.setCorrection(-5);
 
-		assertEquals(195, sensor.getRealTemp());
+		assertEquals(195, (int) sensor.getRealTemp());
 	}
 
 	@Test
@@ -21,7 +21,7 @@ public class SensorTest {
 		sensor.setTempOnSensor(200);
 		sensor.setCorrection(5);
 
-		assertEquals(205, sensor.getRealTemp());
+		assertEquals(205, (int) sensor.getRealTemp());
 	}
 
 	@Test
@@ -30,6 +30,6 @@ public class SensorTest {
 		sensor.setTempOnSensor(200);
 		sensor.setCorrection(0);
 
-		assertEquals(200, sensor.getRealTemp());
+		assertEquals(200, (int) sensor.getRealTemp());
 	}
 }

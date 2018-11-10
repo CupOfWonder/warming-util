@@ -11,6 +11,17 @@ public class SensorGroup {
 	private WarmingState state;
 	private RelayPosition relayPos;
 
+	private int groupNumber;
+	private int relayNumber;
+	private int leftSensorPin;
+	private int rightSensorPin;
+
+	public SensorGroup(int relayNumber, int leftSensorPin, int rightSensorPin) {
+		this.relayNumber = relayNumber;
+		this.leftSensorPin = leftSensorPin;
+		this.rightSensorPin = rightSensorPin;
+	}
+
 	private void recountRelayPosition() {
 		int groupTemp = countGroupTemp();
 
@@ -63,5 +74,21 @@ public class SensorGroup {
 
 	public RelayPosition getRelayPos() {
 		return relayPos;
+	}
+
+	public int getGroupNumber() {
+		return groupNumber;
+	}
+
+	public void setGroupNumber(int groupNumber) {
+		this.groupNumber = groupNumber;
+	}
+
+	public Integer getLeftTemp() {
+		return leftSensor.getRealTemp();
+	}
+
+	public Integer getRightTemp() {
+		return rightSensor.getRealTemp();
 	}
 }

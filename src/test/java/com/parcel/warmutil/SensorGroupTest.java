@@ -13,7 +13,7 @@ public class SensorGroupTest {
 
 	@Test
 	public void warmTest() {
-		SensorGroup group = new SensorGroup();
+		SensorGroup group = new SensorGroup(1,1, 1);
 		group.setTempRange(new SensorTempRange(180, 220));
 		group.setSensorTempValues(0, 0);
 
@@ -23,7 +23,7 @@ public class SensorGroupTest {
 
 	@Test
 	public void sustainTest() {
-		SensorGroup group = new SensorGroup();
+		SensorGroup group = new SensorGroup(1, 1, 1);
 		group.setTempRange(new SensorTempRange(180, 220));
 		group.setSensorTempValues(50, 50);
 
@@ -35,7 +35,7 @@ public class SensorGroupTest {
 
 	@Test
 	public void coolTest() {
-		SensorGroup group = new SensorGroup();
+		SensorGroup group = new SensorGroup(1,1,1);
 		group.setTempRange(new SensorTempRange(180, 220));
 		group.setSensorTempValues(300, 200);
 
