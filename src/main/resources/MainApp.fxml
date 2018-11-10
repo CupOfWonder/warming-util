@@ -67,9 +67,9 @@
                 <VBox spacing="10">
                     <padding><Insets top="25" right="25" bottom="25" left="25"/></padding>
                     <Label text="Установить поправку для каждого датчика" />
-                    <TableView prefHeight="300.0" prefWidth="800.0" fx:id="calibrationTable">
+                    <TableView prefHeight="300.0" prefWidth="800.0" fx:id="calibrationTable" editable="true">
                         <columns>
-                            <TableColumn sortable="false" resizable="false" prefWidth="175"
+                            <TableColumn sortable="false" resizable="false" prefWidth="175" editable="false"
                                          text="№ группы" fx:id="calibrationGroupNum"/>
                             <TableColumn sortable="false" resizable="false" prefWidth="300"
                                          text="Поправка к темп-ре левого датчика" fx:id="calibrationLeftSensor"/>

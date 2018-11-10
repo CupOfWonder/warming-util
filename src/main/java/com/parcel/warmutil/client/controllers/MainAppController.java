@@ -2,6 +2,7 @@ package com.parcel.warmutil.client.controllers;
 
 import com.parcel.warmutil.client.helpers.StringHelper;
 import com.parcel.warmutil.client.helpers.StyleHelper;
+import com.parcel.warmutil.client.widgets.table.CalibrationEditCell;
 import com.parcel.warmutil.client.widgets.table.TemperatureEditCell;
 import com.parcel.warmutil.model.MainProgramState;
 import com.parcel.warmutil.model.SensorGroup;
@@ -49,6 +50,12 @@ public class MainAppController {
 	public TableView<CalibrationOptions> calibrationTable;
 
 	@FXML
+	public TableColumn<CalibrationOptions, String> calibrationGroupNum;
+
+	@FXML
+	public TableColumn<CalibrationOptions, Integer> calibrationLeftSensor, calibrationRightSensor;
+
+	@FXML
 	private Button startWarming;
 
 	private MainProgramState programState = MainProgramState.getInstance();
@@ -92,12 +99,7 @@ public class MainAppController {
 	private void initTempRangeTable() {
 		tempOptionsTable.getSelectionModel().setCellSelectionEnabled(true);
 		tempOptionsTable.setItems(tempOptionsObservableList());
-		tempOptionsTable.setOnMouseClicked(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				editTempFocusedCell();
-			}
-		});
+
 		tempGroupNum.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<>(
 				Long.toString(cellData.getValue().getGroupNumber()))
 		);
@@ -125,20 +127,35 @@ public class MainAppController {
 		});
 	}
 
-	private void editTempFocusedCell() {
-		final TablePosition <TempRangeOptions, ?> focusedCell = tempOptionsTable
-
-				.focusModelProperty().get().focusedCellProperty().get();
-		tempOptionsTable.edit(focusedCell.getRow(), focusedCell.getTableColumn());
-	}
-
+	//Таблица "Калибровка датчиков"
 	private void initCalibrationTable() {
+		calibrationTable.getSelectionModel().setCellSelectionEnabled(true);
+		calibrationTable.setItems(tempCalibrationOptionsObservableList());
 
-	}
+		//Колонка "№ группы"
+		calibrationGroupNum.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<>(
+				Long.toString(cellData.getValue().getGroupNumber()))
+		);
 
-	@FXML
-	public void handleStartWarming(MouseEvent mouseEvent) {
+		//Колонка "Поправка к левому датчику"
+		calibrationLeftSensor.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Integer>(
+				cellData.getValue().getLeftCalibration()
+		));
+		calibrationLeftSensor.setOnEditCommit(event -> {
+			event.getRowValue().setLeftCalibration(event.getNewValue());
+			calibrationTable.refresh();
+		});
+		calibrationLeftSensor.setCellFactory(cellData -> new CalibrationEditCell());
 
+		//Колонка "Поправка к правому датчику
+		calibrationRightSensor.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Integer>(
+				cellData.getValue().getRightCalibration()
+		));
+		calibrationRightSensor.setOnEditCommit(event -> {
+			event.getRowValue().setRightCalibration(event.getNewValue());
+			calibrationTable.refresh();
+		});
+		calibrationRightSensor.setCellFactory(cellData -> new CalibrationEditCell());
 	}
 
 	private ObservableList<SensorGroup> sensorObservableList() {
@@ -165,4 +182,10 @@ public class MainAppController {
 	public void onTempOptionsConfirmed(MouseEvent mouseEvent) {
 		editFinisher.finishEdit();
 	}
+
+	@FXML
+	public void handleStartWarming(MouseEvent mouseEvent) {
+
+	}
+
 }
