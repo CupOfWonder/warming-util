@@ -13,15 +13,18 @@ public class OptionsSaver {
 
 	private static Logger logger = Logger.getLogger("OptionsSaver");
 
-	public static void saveOptions(ProgramOptions options) {
+	public static boolean saveOptions(ProgramOptions options) {
 		ObjectMapper mapper = new ObjectMapper();
 		try(FileWriter fileWriter = new FileWriter(OPTIONS_FILE_NAME);
 			PrintWriter printWriter = new PrintWriter(fileWriter)) {
 
 			String jsonResult = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(options);
 			printWriter.print(jsonResult);
+
+			return true;
 		} catch (java.io.IOException e) {
 			logger.log(Level.SEVERE, "Exception while saving options" , e);
+			return false;
 		}
 	}
 }

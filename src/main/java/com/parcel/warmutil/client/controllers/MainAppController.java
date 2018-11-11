@@ -2,23 +2,23 @@ package com.parcel.warmutil.client.controllers;
 
 import com.parcel.warmutil.client.helpers.StringHelper;
 import com.parcel.warmutil.client.helpers.StyleHelper;
+import com.parcel.warmutil.client.widgets.MessageShowManager;
 import com.parcel.warmutil.client.widgets.table.CalibrationEditCell;
 import com.parcel.warmutil.client.widgets.table.TemperatureEditCell;
 import com.parcel.warmutil.model.MainProgramState;
 import com.parcel.warmutil.model.SensorGroup;
+import com.parcel.warmutil.model.board.BoardStatus;
 import com.parcel.warmutil.model.events.TableEditFinisher;
 import com.parcel.warmutil.model.helpers.StateChangeHandler;
 import com.parcel.warmutil.model.helpers.WarmingState;
+import com.parcel.warmutil.model.helpers.WorkingStatus;
 import com.parcel.warmutil.model.options.CalibrationOptions;
 import com.parcel.warmutil.model.options.TempRangeOptions;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 
 import java.util.List;
@@ -28,7 +28,7 @@ import static com.parcel.warmutil.client.helpers.StringHelper.temperatureString;
 
 public class MainAppController {
 
-	TableEditFinisher editFinisher = TableEditFinisher.getInstance();
+	private TableEditFinisher editFinisher = TableEditFinisher.getInstance();
 
 	@FXML
 	public TableView<SensorGroup> monitoringTable;
@@ -61,7 +61,12 @@ public class MainAppController {
 	@FXML
 	private Button startWarming;
 
+	@FXML
+	private Label monitoringMessage, tempMessage, calibrationMessage, workingStatusLabel;
+
 	private MainProgramState programState = MainProgramState.getInstance();
+
+	private MessageShowManager messageShowManager = new MessageShowManager();
 
 	@FXML
 	public void initialize() {
@@ -101,6 +106,10 @@ public class MainAppController {
 			@Override
 			public void onStateChange(MainProgramState state) {
 				monitoringTable.refresh();
+
+				WorkingStatus status = state.getWorkingStatus();
+				workingStatusLabel.setText(StringHelper.textForWorkingStatus(status));
+				workingStatusLabel.setTextFill(StyleHelper.colorForWorkingStatus(status));
 			}
 		});
 	}
@@ -185,7 +194,13 @@ public class MainAppController {
 	public void onTempOptionsConfirmed(MouseEvent mouseEvent) {
 		editFinisher.finishEdit();
 		programState.applyTempRangeToCurrentOptions(cloneTempOptions(tempOptionsTable.getItems()));
-		programState.saveCurrentOptions();
+		if(programState.saveCurrentOptions()) {
+			showOptionsSaved(tempMessage);
+		} else {
+			showOptionsSaveError(tempMessage);
+		}
+
+
 	}
 
 	private List<TempRangeOptions> cloneTempOptions(List<TempRangeOptions> options) {
@@ -199,7 +214,20 @@ public class MainAppController {
 	public void onCalibrationOptionsConfirmed(MouseEvent mouseEvent) {
 		editFinisher.finishEdit();
 		programState.applyNewCalibrationToOptions(cloneCalibrationOptions(calibrationTable.getItems()));
-		programState.saveCurrentOptions();
+		if(programState.saveCurrentOptions()) {
+			showOptionsSaved(calibrationMessage);
+		} else {
+			showOptionsSaveError(calibrationMessage);
+		}
+
+	}
+
+	private void showOptionsSaveError(Label calibrationMessage) {
+		messageShowManager.showError(calibrationMessage, "При сохранении опций возникла ошибка");
+	}
+
+	private void showOptionsSaved(Label label) {
+		messageShowManager.showSuccess(label, "Опции сохранены");
 	}
 
 	public void onCalibrationOptionsCancelled(MouseEvent mouseEvent) {
@@ -214,6 +242,11 @@ public class MainAppController {
 
 	public void onStartClick(MouseEvent mouseEvent) {
 		programState.startWorking();
+
+		BoardStatus status = programState.getBoardStatus();
+		if(status != BoardStatus.CONNECTED) {
+			messageShowManager.showError(monitoringMessage, "Не удалось подключиться к плате");
+		}
 	}
 
 	public void onStopClick(MouseEvent mouseEvent) {

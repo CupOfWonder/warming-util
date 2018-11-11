@@ -12,6 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.Pane?>
 <TabPane maxHeight="-Infinity" prefHeight="400.0"
          prefWidth="825.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.112"
          xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.parcel.warmutil.client.controllers.MainAppController">
@@ -20,7 +21,13 @@
             <content>
                 <VBox spacing="10">
                     <padding><Insets top="25" right="25" bottom="25" left="25"/></padding>
-                    <Label text="Контроль температуры ламп" />
+                    <HBox>
+                        <Label text="Контроль температуры ламп" />
+                        <Pane HBox.hgrow="ALWAYS" />
+                        <Label textAlignment="RIGHT" fx:id="workingStatusLabel"
+                               text="Установка не запущена"/>
+                    </HBox>
+
                     <TableView fx:id="monitoringTable" >
                         <columns>
                             <TableColumn sortable="false" resizable="false" prefWidth="100"
@@ -36,6 +43,9 @@
                     <HBox spacing="5">
                         <Button text="Пуск" minWidth="100" fx:id="startWarming" onMouseClicked="#onStartClick"/>
                         <Button text="Стоп" minWidth="100" fx:id="stopWarming" onMouseClicked="#onStopClick"/>
+                        <Pane HBox.hgrow="ALWAYS" />
+                        <Label text="Очень длинное ообщение" minHeight="25" textAlignment="RIGHT"
+                               fx:id="monitoringMessage" opacity="0"/>
                     </HBox>
                 </VBox>
             </content>
@@ -58,6 +68,9 @@
                     <HBox spacing="5">
                         <Button text="Применить" minWidth="100" onMouseClicked="#onTempOptionsConfirmed"/>
                         <Button text="Отменить изменения" minWidth="100" onMouseClicked="#onTempOptionsCancelled"/>
+                        <Pane HBox.hgrow="ALWAYS" />
+                        <Label minHeight="25" textAlignment="RIGHT"
+                               fx:id="tempMessage" opacity="0"/>
                     </HBox>
                 </VBox>
             </content>
@@ -80,6 +93,10 @@
                     <HBox spacing="5">
                         <Button text="Применить" minWidth="100" onMouseClicked="#onCalibrationOptionsConfirmed"/>
                         <Button text="Отменить изменения" minWidth="100" onMouseClicked="#onCalibrationOptionsCancelled"/>
+                        <Pane HBox.hgrow="ALWAYS" />
+                        <Label text="Очень длинное ообщение" minHeight="25" textAlignment="RIGHT"
+                               fx:id="calibrationMessage" opacity="0"/>
+
                     </HBox>
                 </VBox>
             </content>

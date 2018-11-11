@@ -1,8 +1,9 @@
-package com.parcel.warmutil.model;
+package com.parcel.warmutil.model.board;
 
 
 import com.parcel.harddrivers.Commutator;
 import com.parcel.harddrivers.helpers.IntAns;
+import com.parcel.warmutil.model.Sensor;
 import com.parcel.warmutil.model.helpers.ErrorCode;
 import com.parcel.warmutil.model.helpers.RelayPosition;
 

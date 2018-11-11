@@ -1,6 +1,7 @@
 package com.parcel.warmutil.client.helpers;
 
 import com.parcel.warmutil.model.helpers.WarmingState;
+import com.parcel.warmutil.model.helpers.WorkingStatus;
 import javafx.scene.paint.Color;
 
 /**
@@ -21,6 +22,14 @@ public class StyleHelper {
 				return Color.GREEN;
 			default:
 				throw new IllegalArgumentException("Warming state "+state+" not supported");
+		}
+	}
+
+	public static Color colorForWorkingStatus(WorkingStatus status) {
+		if(status == WorkingStatus.WORKING) {
+			return Color.GREEN;
+		} else {
+			return Color.BLACK;
 		}
 	}
 }

@@ -1,8 +1,11 @@
 package com.parcel.warmutil.model;
 
+import com.parcel.warmutil.model.board.BoardConnector;
+import com.parcel.warmutil.model.board.BoardStatus;
 import com.parcel.warmutil.model.helpers.ErrorCode;
 import com.parcel.warmutil.model.helpers.RelayPosition;
 import com.parcel.warmutil.model.helpers.StateChangeHandler;
+import com.parcel.warmutil.model.helpers.WorkingStatus;
 import com.parcel.warmutil.model.options.*;
 
 import java.util.*;
@@ -27,7 +30,8 @@ public class MainProgramState {
 	private Timer refreshTimer;
 	private static final int REFRESH_PERIOD = 1000;
 
-	private boolean programStated = false;
+	private BoardStatus boardStatus;
+	private WorkingStatus workingStatus = WorkingStatus.NOT_WORKING;
 	private volatile boolean requestingNow = false;
 
 	private BoardConnector boardConnector;
@@ -118,8 +122,8 @@ public class MainProgramState {
 		applyOptionsToModel();
 	}
 
-	public void saveCurrentOptions() {
-		OptionsSaver.saveOptions(currentOptions);
+	public boolean saveCurrentOptions() {
+		return OptionsSaver.saveOptions(currentOptions);
 	}
 
 	public ProgramOptions getCurrentOptions() {
@@ -128,10 +132,12 @@ public class MainProgramState {
 
 	public void startWorking() {
 		if(!boardConnector.isConnected()) {
+			boardStatus = BoardStatus.CONNECTING;
 			boardConnector.connectToBoard();
 		}
 
 		if(boardConnector.isConnected()) {
+			boardStatus = BoardStatus.CONNECTED;
 			turnOffAllRelays();
 
 			refreshTimer = new Timer();
@@ -141,7 +147,11 @@ public class MainProgramState {
 					refreshProgramState();
 				}
 			}, 0, REFRESH_PERIOD);
+			refreshWorkingStatus(WorkingStatus.WORKING);
+		} else { ;
+			boardStatus = BoardStatus.NOT_CONNECTED;
 		}
+
 	}
 
 	public void stopWorking() {
@@ -150,6 +160,7 @@ public class MainProgramState {
 		 	refreshTimer = null;
 
 		 	turnOffAllRelays();
+		 	refreshWorkingStatus(WorkingStatus.NOT_WORKING);
 		}
 	}
 
@@ -179,5 +190,22 @@ public class MainProgramState {
 
 	public void handleProgramClose() {
 		turnOffAllRelays();
+	}
+
+	public BoardStatus getBoardStatus() {
+		return boardStatus;
+	}
+
+	public void setBoardStatus(BoardStatus boardStatus) {
+		this.boardStatus = boardStatus;
+	}
+
+	private void refreshWorkingStatus(WorkingStatus status) {
+		this.workingStatus = status;
+		handleStateChange();
+	}
+
+	public WorkingStatus getWorkingStatus() {
+		return workingStatus;
 	}
 }
