@@ -188,7 +188,7 @@ public class MainProgramState {
 	}
 
 	public synchronized void refreshProgramState() {
-		if(boardConnector.isConnected()) {
+		if(boardConnector.isConnected() && workingStatus == WorkingStatus.WORKING) {
 			for(SensorGroup group : sensorGroups) {
 				reloadSensor(group.getLeftSensor());
 				reloadSensor(group.getRightSensor());
