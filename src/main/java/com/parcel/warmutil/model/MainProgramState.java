@@ -131,6 +131,10 @@ public class MainProgramState {
 	}
 
 	public void startWorking() {
+		if(workingStatus == WorkingStatus.WORKING) {
+			return;
+		}
+
 		if(!boardConnector.isConnected()) {
 			boardStatus = BoardStatus.CONNECTING;
 			boardConnector.connectToBoard();
@@ -155,6 +159,10 @@ public class MainProgramState {
 	}
 
 	public void stopWorking() {
+		if(workingStatus == WorkingStatus.NOT_WORKING) {
+			return;
+		}
+		
 		if(refreshTimer != null) {
 		 	refreshTimer.cancel();
 		 	refreshTimer = null;
