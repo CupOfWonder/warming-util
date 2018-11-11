@@ -217,6 +217,9 @@ public class MainProgramState {
 
 	public void handleProgramClose() {
 		turnOffAllRelays();
+		if(refreshTimer != null) {
+			refreshTimer.cancel();
+		}
 	}
 
 	public BoardStatus getBoardStatus() {
