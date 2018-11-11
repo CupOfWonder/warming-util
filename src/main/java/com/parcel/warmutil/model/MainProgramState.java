@@ -31,7 +31,7 @@ public class MainProgramState {
 	private static final int REFRESH_PERIOD = 1000;
 
 	private BoardStatus boardStatus;
-	private WorkingStatus workingStatus = WorkingStatus.NOT_WORKING;
+	private volatile WorkingStatus workingStatus = WorkingStatus.NOT_WORKING;
 	private volatile boolean requestingNow = false;
 
 	private BoardConnector boardConnector;
@@ -164,11 +164,12 @@ public class MainProgramState {
 		}
 
 		if(refreshTimer != null) {
-		 	refreshTimer.cancel();
+			refreshWorkingStatus(WorkingStatus.NOT_WORKING);
+
+			refreshTimer.cancel();
 		 	refreshTimer = null;
 
 		 	turnOffAllRelays();
-		 	refreshWorkingStatus(WorkingStatus.NOT_WORKING);
 		 	resetAllTemperatures();
 
 		 	handleStateChange();
@@ -176,9 +177,7 @@ public class MainProgramState {
 	}
 
 	private void resetAllTemperatures() {
-		for(SensorGroup group : sensorGroups) {
-			group.resetValues();
-		}
+		sensorGroups.forEach(SensorGroup::resetValues);
 	}
 
 	private void turnOffAllRelays() {
@@ -197,7 +196,13 @@ public class MainProgramState {
 
 				boardConnector.writeRelayPosition(group.getRelayNumber(), group.getRelayPos());
 			}
-			handleStateChange();
+
+			if(workingStatus == WorkingStatus.WORKING) {
+				handleStateChange();
+			} else {
+				resetAllTemperatures();
+			}
+
 		}
 
 	}
