@@ -15,7 +15,7 @@ public class Sensor {
 		this.pinNum = pinNum;
 	}
 
-	public void setTempOnSensor(int tempOnSensor) {
+	public void setTempOnSensor(Integer tempOnSensor) {
 		this.tempOnSensor = tempOnSensor;
 	}
 

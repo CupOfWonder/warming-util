@@ -38,6 +38,8 @@ public class BoardConnector {
 	}
 
 	public void writeRelayPosition(int relayNum, RelayPosition pos) {
-		commutator.relayWrite(relayNum, pos.isOn());
+		if(pos != null) {
+			commutator.relayWrite(relayNum, pos.isOn());
+		}
 	}
 }

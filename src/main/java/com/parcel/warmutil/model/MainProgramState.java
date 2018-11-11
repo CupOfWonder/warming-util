@@ -37,9 +37,9 @@ public class MainProgramState {
 	private BoardConnector boardConnector;
 
 	private MainProgramState() {
-		addSensorGroup(12, 1, 2);
-		addSensorGroup(13, 3, 4);
-		addSensorGroup(14, 5, 6);
+		addSensorGroup(12, 14, 15);
+		addSensorGroup(13, 16, 17);
+		addSensorGroup(14, 18, 19);
 
 		tryLoadOptions();
 		boardConnector = new BoardConnector(currentOptions.getBoardName(), currentOptions.getMultiplyKoef());
@@ -169,6 +169,15 @@ public class MainProgramState {
 
 		 	turnOffAllRelays();
 		 	refreshWorkingStatus(WorkingStatus.NOT_WORKING);
+		 	resetAllTemperatures();
+
+		 	handleStateChange();
+		}
+	}
+
+	private void resetAllTemperatures() {
+		for(SensorGroup group : sensorGroups) {
+			group.resetValues();
 		}
 	}
 
@@ -179,13 +188,18 @@ public class MainProgramState {
 	}
 
 	public synchronized void refreshProgramState() {
-		for(SensorGroup group : sensorGroups) {
-			reloadSensor(group.getLeftSensor());
-			reloadSensor(group.getRightSensor());
+		if(boardConnector.isConnected()) {
+			for(SensorGroup group : sensorGroups) {
+				reloadSensor(group.getLeftSensor());
+				reloadSensor(group.getRightSensor());
 
-			boardConnector.writeRelayPosition(group.getRelayNumber(), group.getRelayPos());
+				group.recountRelayPosition();
+
+				boardConnector.writeRelayPosition(group.getRelayNumber(), group.getRelayPos());
+			}
+			handleStateChange();
 		}
-		handleStateChange();
+
 	}
 
 	private void reloadSensor(Sensor sensor) {

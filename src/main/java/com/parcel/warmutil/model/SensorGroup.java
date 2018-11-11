@@ -10,7 +10,7 @@ public class SensorGroup {
 	private SensorTempRange tempRange;
 
 	private WarmingState state;
-	private RelayPosition relayPos;
+	private RelayPosition relayPos = RelayPosition.OFF;
 
 	private int groupNumber;
 	private int relayNumber;
@@ -21,7 +21,7 @@ public class SensorGroup {
 		rightSensor.setPinNum(rightSensorPin);
 	}
 
-	private void recountRelayPosition() {
+	public void recountRelayPosition() {
 		int groupTemp = countGroupTemp();
 
 		if(groupTemp < tempRange.getMinTemp()) {
@@ -109,5 +109,11 @@ public class SensorGroup {
 
 	public void setRightSensor(Sensor rightSensor) {
 		this.rightSensor = rightSensor;
+	}
+
+	public void resetValues() {
+		leftSensor.setTempOnSensor(null);
+		rightSensor.setTempOnSensor(null);
+		state = null;
 	}
 }
