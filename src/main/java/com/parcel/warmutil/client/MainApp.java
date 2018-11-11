@@ -2,15 +2,20 @@ package com.parcel.warmutil.client;/**
  * Created by nemo on 10.11.18.
  */
 
+import com.parcel.warmutil.model.MainProgramState;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 
 public class MainApp extends Application {
+
+	MainProgramState programState = MainProgramState.getInstance();
 
 	public static void main(String[] args) {
 		launch(args);
@@ -25,6 +30,13 @@ public class MainApp extends Application {
 
 		stage.setResizable(false);
 		stage.sizeToScene();
+
+		stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+			@Override
+			public void handle(WindowEvent event) {
+				programState.handleProgramClose();
+			}
+		});
 
 		stage.setTitle("Управление нагревом");
 		stage.setScene(scene);

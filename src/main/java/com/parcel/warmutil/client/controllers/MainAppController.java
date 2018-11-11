@@ -7,6 +7,7 @@ import com.parcel.warmutil.client.widgets.table.TemperatureEditCell;
 import com.parcel.warmutil.model.MainProgramState;
 import com.parcel.warmutil.model.SensorGroup;
 import com.parcel.warmutil.model.events.TableEditFinisher;
+import com.parcel.warmutil.model.helpers.StateChangeHandler;
 import com.parcel.warmutil.model.helpers.WarmingState;
 import com.parcel.warmutil.model.options.CalibrationOptions;
 import com.parcel.warmutil.model.options.TempRangeOptions;
@@ -96,6 +97,12 @@ public class MainAppController {
 			}
 		});
 
+		programState.addStateChangeHandler(new StateChangeHandler() {
+			@Override
+			public void onStateChange(MainProgramState state) {
+				monitoringTable.refresh();
+			}
+		});
 	}
 
 	private void initTempRangeTable() {

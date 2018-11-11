@@ -1,6 +1,7 @@
 package com.parcel.warmutil.model;
 
 import com.parcel.warmutil.model.helpers.ErrorCode;
+import com.parcel.warmutil.model.helpers.RelayPosition;
 import com.parcel.warmutil.model.helpers.StateChangeHandler;
 import com.parcel.warmutil.model.options.*;
 
@@ -131,6 +132,8 @@ public class MainProgramState {
 		}
 
 		if(boardConnector.isConnected()) {
+			turnOffAllRelays();
+
 			refreshTimer = new Timer();
 			refreshTimer.schedule(new TimerTask() {
 				@Override
@@ -142,7 +145,18 @@ public class MainProgramState {
 	}
 
 	public void stopWorking() {
-		refreshTimer.cancel();
+		if(refreshTimer != null) {
+		 	refreshTimer.cancel();
+		 	refreshTimer = null;
+
+		 	turnOffAllRelays();
+		}
+	}
+
+	private void turnOffAllRelays() {
+		if(boardConnector.isConnected()) {
+			sensorGroups.forEach(g -> boardConnector.writeRelayPosition(g.getRelayNumber(), RelayPosition.OFF));
+		}
 	}
 
 	public synchronized void refreshProgramState() {
@@ -161,5 +175,9 @@ public class MainProgramState {
 		if(code != ErrorCode.NO_ERROR) {
 			logger.log(Level.SEVERE, "Received error "+code+" on pin "+sensor.getPinNum());
 		}
+	}
+
+	public void handleProgramClose() {
+		turnOffAllRelays();
 	}
 }
