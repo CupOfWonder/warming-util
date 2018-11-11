@@ -162,7 +162,7 @@ public class MainProgramState {
 		if(workingStatus == WorkingStatus.NOT_WORKING) {
 			return;
 		}
-		
+
 		if(refreshTimer != null) {
 		 	refreshTimer.cancel();
 		 	refreshTimer = null;
