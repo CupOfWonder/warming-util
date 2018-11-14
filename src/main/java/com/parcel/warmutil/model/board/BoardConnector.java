@@ -23,21 +23,20 @@ public class BoardConnector {
 	}
 
 	public boolean isConnected() {
-		System.out.println(connectionStatus);
 		return connectionStatus != null && !connectionStatus.equals("ERROR");
 	}
 
-	public ErrorCode refreshSensorTemp(Sensor sensor) {
+	public synchronized ErrorCode refreshSensorTemp(Sensor sensor) {
 		IntAns ans = commutator.getTemp(sensor.getPinNum(), multiplyKoeff);
 		ErrorCode code = ErrorCode.byCode(ans.getError());
 
 		if(code == ErrorCode.NO_ERROR) {
-			sensor.setTempOnSensor(ans.getData());
+			sensor.addSensorValue(ans.getData());
 		}
 		return code;
 	}
 
-	public void writeRelayPosition(int relayNum, RelayPosition pos) {
+	public synchronized void writeRelayPosition(int relayNum, RelayPosition pos) {
 		if(pos != null) {
 			commutator.relayWrite(relayNum, pos.isOn());
 		}

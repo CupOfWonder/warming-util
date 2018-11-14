@@ -51,13 +51,6 @@ public class SensorGroup {
 		return (int) Math.round(((double) leftSensor.getRealTemp() + (double) rightSensor.getRealTemp())/2);
 	}
 
-	public void setSensorTempValues(int leftTemp, int rightTemp) {
-		leftSensor.setTempOnSensor(leftTemp);
-		rightSensor.setTempOnSensor(rightTemp);
-
-		recountRelayPosition();
-	}
-
 	public void setSensorCorrections(int leftCorrection, int rightCorrection) {
 		leftSensor.setCorrection(leftCorrection);
 		rightSensor.setCorrection(rightCorrection);
@@ -112,8 +105,8 @@ public class SensorGroup {
 	}
 
 	public void resetValues() {
-		leftSensor.setTempOnSensor(null);
-		rightSensor.setTempOnSensor(null);
+		leftSensor.resetValue();
+		rightSensor.resetValue();
 		state = null;
 	}
 }

@@ -14,7 +14,9 @@ public class SensorGroupTest {
 	public void warmTest() {
 		SensorGroup group = new SensorGroup(1,1, 1);
 		group.setTempRange(180, 220);
-		group.setSensorTempValues(0, 0);
+		group.getLeftSensor().addSensorValue(10);
+		group.getRightSensor().addSensorValue(20);
+		group.recountRelayPosition();
 
 		assertEquals(WarmingState.WARMING, group.getState());
 		assertEquals(RelayPosition.ON, group.getRelayPos());
@@ -24,11 +26,20 @@ public class SensorGroupTest {
 	public void sustainTest() {
 		SensorGroup group = new SensorGroup(1, 1, 1);
 		group.setTempRange(180, 220);
-		group.setSensorTempValues(50, 50);
+		group.getLeftSensor().addSensorValue(10);
+		group.getRightSensor().addSensorValue(20);
+		group.recountRelayPosition();
 
 		assertEquals(WarmingState.WARMING, group.getState());
 
-		group.setSensorTempValues(190, 210);
+		group.getLeftSensor().addSensorValue(200);
+		group.getLeftSensor().addSensorValue(200);
+		group.getLeftSensor().addSensorValue(200);
+		group.getRightSensor().addSensorValue(210);
+		group.getRightSensor().addSensorValue(210);
+		group.getRightSensor().addSensorValue(210);
+		group.recountRelayPosition();
+
 		assertEquals(WarmingState.SUSTAIN, group.getState());
 	}
 
@@ -36,7 +47,9 @@ public class SensorGroupTest {
 	public void coolTest() {
 		SensorGroup group = new SensorGroup(1,1,1);
 		group.setTempRange(180, 220);
-		group.setSensorTempValues(300, 200);
+		group.getLeftSensor().addSensorValue(500);
+		group.getRightSensor().addSensorValue(500);
+		group.recountRelayPosition();
 
 		assertEquals(WarmingState.COOLING, group.getState());
 	}
