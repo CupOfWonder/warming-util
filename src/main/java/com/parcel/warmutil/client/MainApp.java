@@ -35,6 +35,8 @@ public class MainApp extends Application {
 			@Override
 			public void handle(WindowEvent event) {
 				programState.handleProgramClose();
+				System.out.println("Program closed");
+				System.exit(0);
 			}
 		});
 

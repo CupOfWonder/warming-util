@@ -42,7 +42,7 @@ public class MainProgramState {
 		addSensorGroup(14, 18, 19);
 
 		tryLoadOptions();
-		boardConnector = new BoardConnector(currentOptions.getBoardName(), currentOptions.getMultiplyKoef());
+		boardConnector = new BoardConnector(currentOptions.getBoardName());
 	}
 
 	private void tryLoadOptions() {
@@ -78,6 +78,11 @@ public class MainProgramState {
 
 	private void applyOptionsToModel() {
 		Map<Integer, SensorGroup> groupMap = getGroupMap();
+
+		for(MultiplyKoeffOptions opts : currentOptions.getMultiplyKoeffOptions()) {
+			SensorGroup group = groupMap.get(opts.getGroupNumber());
+			group.setMultiplyKoeffs(opts.getLeftKoeff(), opts.getRightKoeff());
+		}
 
 		for(TempRangeOptions opts : currentOptions.getTempRangeOptions()) {
 			SensorGroup group = groupMap.get(opts.getGroupNumber());

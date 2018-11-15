@@ -4,7 +4,8 @@ import java.util.List;
 
 public class ProgramOptions {
 	private String boardName = "test";
-	private double multiplyKoef = 1;
+
+	private List<MultiplyKoeffOptions> multiplyKoeffOptions;
 	private List<TempRangeOptions> tempRangeOptions;
 	private List<CalibrationOptions> calibrationOptions;
 
@@ -14,14 +15,6 @@ public class ProgramOptions {
 
 	public void setBoardName(String boardName) {
 		this.boardName = boardName;
-	}
-
-	public double getMultiplyKoef() {
-		return multiplyKoef;
-	}
-
-	public void setMultiplyKoef(double multiplyKoef) {
-		this.multiplyKoef = multiplyKoef;
 	}
 
 	public List<TempRangeOptions> getTempRangeOptions() {
@@ -38,5 +31,13 @@ public class ProgramOptions {
 
 	public void setCalibrationOptions(List<CalibrationOptions> calibrationOptions) {
 		this.calibrationOptions = calibrationOptions;
+	}
+
+	public List<MultiplyKoeffOptions> getMultiplyKoeffOptions() {
+		return multiplyKoeffOptions;
+	}
+
+	public void setMultiplyKoeffOptions(List<MultiplyKoeffOptions> multiplyKoeffOptions) {
+		this.multiplyKoeffOptions = multiplyKoeffOptions;
 	}
 }

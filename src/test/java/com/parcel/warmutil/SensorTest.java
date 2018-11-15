@@ -13,20 +13,39 @@ public class SensorTest {
 		sensor.addSensorValue(10);
 		sensor.addSensorValue(20);
 		sensor.addSensorValue(30);
+
+		assertEquals(20, sensor.getRealTemp().intValue());
+
 		sensor.addSensorValue(40);
 
 		assertEquals(30, sensor.getRealTemp().intValue());
 	}
 
 	@Test
-	public void testPositiveCorrection() {
+	public void testMultiply() {
 		Sensor sensor = new Sensor();
+		sensor.setMultiplyKoeff(2);
+
 		sensor.addSensorValue(10);
 		sensor.addSensorValue(20);
 		sensor.addSensorValue(30);
+
+		assertEquals(40, sensor.getRealTemp().intValue());
+	}
+
+
+	@Test
+	public void testPositiveCorrection() {
+		Sensor sensor = new Sensor();
+		sensor.setMultiplyKoeff(2);
+
+		sensor.addSensorValue(10);
+		sensor.addSensorValue(20);
+		sensor.addSensorValue(30);
+
 		sensor.setCorrection(5);
 
-		assertEquals(25, (int) sensor.getRealTemp());
+		assertEquals(45, (int) sensor.getRealTemp());
 	}
 
 }

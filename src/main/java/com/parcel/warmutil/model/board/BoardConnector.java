@@ -13,9 +13,8 @@ public class BoardConnector {
 	private double multiplyKoeff;
 	private String connectionStatus;
 
-	public BoardConnector(String boardName, double multiplyKoeff) {
+	public BoardConnector(String boardName) {
 		commutator = new Commutator(boardName);
-		this.multiplyKoeff = multiplyKoeff;
 	}
 
 	public void connectToBoard() {

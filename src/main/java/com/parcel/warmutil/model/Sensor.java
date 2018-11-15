@@ -10,6 +10,7 @@ public class Sensor {
 	private static final int MAX_SAVED_VALUES_COUNT = 3;
 
 	private Deque<Integer> sensorValues = new LinkedList<>();
+	private double multiplyKoeff = 1;
 	private int correction = 0;
 	private int pinNum;
 
@@ -25,8 +26,8 @@ public class Sensor {
 		this.correction = correction;
 	}
 
-	public void addSensorValue(int tempOnSensor) {
-		sensorValues.add(tempOnSensor);
+	public void addSensorValue(int voltageOnSensor) {
+		sensorValues.add(voltageOnSensor);
 		if(sensorValues.size() > MAX_SAVED_VALUES_COUNT) {
 			sensorValues.removeFirst();
 		}
@@ -42,13 +43,19 @@ public class Sensor {
 			return null;
 		}
 
-		OptionalDouble doubleTemp = sensorValues.stream().mapToDouble(i -> (double) i).average();
+		OptionalDouble doubleTemp = sensorValues.stream().mapToDouble(i -> ((double) i)*multiplyKoeff).average();
 
-		int temp = (int) Math.round(doubleTemp.getAsDouble());
-		return temp + correction;
+		if(doubleTemp.isPresent()) {
+			return (int) Math.round(doubleTemp.getAsDouble() + correction);
+		}
+		return null;
 	}
 
 	public void resetValue() {
 		sensorValues.clear();
+	}
+
+	public void setMultiplyKoeff(double multiplyKoeff) {
+		this.multiplyKoeff = multiplyKoeff;
 	}
 }

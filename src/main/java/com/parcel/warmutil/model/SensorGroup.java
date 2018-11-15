@@ -109,4 +109,9 @@ public class SensorGroup {
 		rightSensor.resetValue();
 		state = null;
 	}
+
+	public void setMultiplyKoeffs(double leftMultiplyKoeff, double rightMultiplyKoeff) {
+		leftSensor.setMultiplyKoeff(leftMultiplyKoeff);
+		rightSensor.setMultiplyKoeff(rightMultiplyKoeff);
+	}
 }
