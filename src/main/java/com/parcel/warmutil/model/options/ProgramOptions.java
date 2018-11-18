@@ -3,7 +3,7 @@ package com.parcel.warmutil.model.options;
 import java.util.List;
 
 public class ProgramOptions {
-	private String boardName = "test";
+	private String boardName = "alina";
 
 	private List<MultiplyKoeffOptions> multiplyKoeffOptions;
 	private List<TempRangeOptions> tempRangeOptions;
