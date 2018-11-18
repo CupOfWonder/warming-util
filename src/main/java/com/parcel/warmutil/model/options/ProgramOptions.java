@@ -5,7 +5,7 @@ import java.util.List;
 public class ProgramOptions {
 	private String boardName = "alina";
 
-	private List<MultiplyKoeffOptions> multiplyKoeffOptions;
+	private List<ResistanceOptions> resistanceOptions;
 	private List<TempRangeOptions> tempRangeOptions;
 	private List<CalibrationOptions> calibrationOptions;
 
@@ -33,11 +33,11 @@ public class ProgramOptions {
 		this.calibrationOptions = calibrationOptions;
 	}
 
-	public List<MultiplyKoeffOptions> getMultiplyKoeffOptions() {
-		return multiplyKoeffOptions;
+	public List<ResistanceOptions> getResistanceOptions() {
+		return resistanceOptions;
 	}
 
-	public void setMultiplyKoeffOptions(List<MultiplyKoeffOptions> multiplyKoeffOptions) {
-		this.multiplyKoeffOptions = multiplyKoeffOptions;
+	public void setResistanceOptions(List<ResistanceOptions> resistanceOptions) {
+		this.resistanceOptions = resistanceOptions;
 	}
 }

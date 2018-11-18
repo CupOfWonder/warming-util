@@ -24,7 +24,7 @@ public class SensorTest {
 	@Test
 	public void testCorrection() {
 		Sensor sensor = new Sensor();
-		sensor.setMultiplyKoeff(2);
+		sensor.setResistance(2);
 
 		sensor.addTempFromSensor(10);
 		sensor.addTempFromSensor(20);

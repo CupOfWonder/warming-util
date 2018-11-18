@@ -79,9 +79,9 @@ public class MainProgramState {
 	private void applyOptionsToModel() {
 		Map<Integer, SensorGroup> groupMap = getGroupMap();
 
-		for(MultiplyKoeffOptions opts : currentOptions.getMultiplyKoeffOptions()) {
+		for(ResistanceOptions opts : currentOptions.getResistanceOptions()) {
 			SensorGroup group = groupMap.get(opts.getGroupNumber());
-			group.setMultiplyKoeffs(opts.getLeftKoeff(), opts.getRightKoeff());
+			group.setSensorResistances(opts.getLeftResistance(), opts.getRightResistance());
 		}
 
 		for(TempRangeOptions opts : currentOptions.getTempRangeOptions()) {

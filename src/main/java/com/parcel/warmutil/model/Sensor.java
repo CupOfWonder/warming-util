@@ -10,8 +10,8 @@ public class Sensor {
 	private static final int MAX_SAVED_VALUES_COUNT = 3;
 
 	private Deque<Integer> sensorValues = new LinkedList<>();
-	private double multiplyKoeff = 1;
-	private int correction = 0;
+	private double resistance = 1;
+	private volatile int correction = 0;
 	private int pinNum;
 
 	public int getPinNum() {
@@ -55,11 +55,11 @@ public class Sensor {
 		sensorValues.clear();
 	}
 
-	public void setMultiplyKoeff(double multiplyKoeff) {
-		this.multiplyKoeff = multiplyKoeff;
+	public void setResistance(double resistance) {
+		this.resistance = resistance;
 	}
 
-	public double getMultiplyKoeff() {
-		return multiplyKoeff;
+	public double getResistance() {
+		return resistance;
 	}
 }

@@ -25,7 +25,7 @@ public class BoardConnector {
 	}
 
 	public synchronized ErrorCode refreshSensorTemp(Sensor sensor) {
-		IntAns ans = commutator.getTemp(sensor.getPinNum(), sensor.getMultiplyKoeff());
+		IntAns ans = commutator.getTemp(sensor.getPinNum(), sensor.getResistance());
 		ErrorCode code = ErrorCode.byCode(ans.getError());
 
 		if(code == ErrorCode.NO_ERROR) {

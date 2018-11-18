@@ -110,8 +110,8 @@ public class SensorGroup {
 		state = null;
 	}
 
-	public void setMultiplyKoeffs(double leftMultiplyKoeff, double rightMultiplyKoeff) {
-		leftSensor.setMultiplyKoeff(leftMultiplyKoeff);
-		rightSensor.setMultiplyKoeff(rightMultiplyKoeff);
+	public void setSensorResistances(double leftMultiplyKoeff, double rightMultiplyKoeff) {
+		leftSensor.setResistance(leftMultiplyKoeff);
+		rightSensor.setResistance(rightMultiplyKoeff);
 	}
 }

@@ -14,7 +14,7 @@ public class DefaultOptionsCreator {
 
 		List<TempRangeOptions> tempOptions = new ArrayList<>();
 		List<CalibrationOptions> calibrationOptions = new ArrayList<>();
-		List<MultiplyKoeffOptions> multiplyKoeffOptions = new ArrayList<>();
+		List<ResistanceOptions> resistanceOptions = new ArrayList<>();
 
 		for(SensorGroup group : sensorGroups) {
 			TempRangeOptions to = new TempRangeOptions(group.getGroupNumber());
@@ -23,13 +23,13 @@ public class DefaultOptionsCreator {
 			CalibrationOptions co = new CalibrationOptions(group.getGroupNumber());
 			calibrationOptions.add(co);
 
-			MultiplyKoeffOptions mo = new MultiplyKoeffOptions(group.getGroupNumber());
-			multiplyKoeffOptions.add(mo);
+			ResistanceOptions mo = new ResistanceOptions(group.getGroupNumber());
+			resistanceOptions.add(mo);
 
 		}
 		options.setCalibrationOptions(calibrationOptions);
 		options.setTempRangeOptions(tempOptions);
-		options.setMultiplyKoeffOptions(multiplyKoeffOptions);
+		options.setResistanceOptions(resistanceOptions);
 
 		return options;
 	}
