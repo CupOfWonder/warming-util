@@ -37,9 +37,9 @@ public class MainProgramState {
 	private BoardConnector boardConnector;
 
 	private MainProgramState() {
-		addSensorGroup(12, 14, 15);
-		addSensorGroup(13, 16, 17);
-		addSensorGroup(14, 18, 19);
+		addSensorGroup(0, 14, 15);
+		addSensorGroup(1, 16, 17);
+		addSensorGroup(2, 18, 19);
 
 		tryLoadOptions();
 		boardConnector = new BoardConnector(currentOptions.getBoardName());
