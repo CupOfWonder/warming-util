@@ -10,7 +10,6 @@ import com.parcel.warmutil.model.helpers.RelayPosition;
 public class BoardConnector {
 	private Commutator commutator;
 
-	private double multiplyKoeff;
 	private String connectionStatus;
 
 	public BoardConnector(String boardName) {
@@ -26,11 +25,11 @@ public class BoardConnector {
 	}
 
 	public synchronized ErrorCode refreshSensorTemp(Sensor sensor) {
-		IntAns ans = commutator.getTemp(sensor.getPinNum(), multiplyKoeff);
+		IntAns ans = commutator.getTemp(sensor.getPinNum(), sensor.getMultiplyKoeff());
 		ErrorCode code = ErrorCode.byCode(ans.getError());
 
 		if(code == ErrorCode.NO_ERROR) {
-			sensor.addSensorValue(ans.getData());
+			sensor.addTempFromSensor(ans.getData());
 		}
 		return code;
 	}

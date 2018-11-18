@@ -26,7 +26,7 @@ public class Sensor {
 		this.correction = correction;
 	}
 
-	public void addSensorValue(int voltageOnSensor) {
+	public void addTempFromSensor(int voltageOnSensor) {
 		sensorValues.add(voltageOnSensor);
 		if(sensorValues.size() > MAX_SAVED_VALUES_COUNT) {
 			sensorValues.removeFirst();
@@ -43,7 +43,7 @@ public class Sensor {
 			return null;
 		}
 
-		OptionalDouble doubleTemp = sensorValues.stream().mapToDouble(i -> ((double) i)*multiplyKoeff).average();
+		OptionalDouble doubleTemp = sensorValues.stream().mapToDouble(i -> ((double) i)).average();
 
 		if(doubleTemp.isPresent()) {
 			return (int) Math.round(doubleTemp.getAsDouble() + correction);
@@ -57,5 +57,9 @@ public class Sensor {
 
 	public void setMultiplyKoeff(double multiplyKoeff) {
 		this.multiplyKoeff = multiplyKoeff;
+	}
+
+	public double getMultiplyKoeff() {
+		return multiplyKoeff;
 	}
 }
