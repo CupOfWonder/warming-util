@@ -202,17 +202,23 @@ public class MainProgramState {
 
 				group.recountRelayPosition();
 
-				boardConnector.writeRelayPosition(group.getRelayNumber(), group.getRelayPos());
+				if(working()) {	//Защита на случай уже вырубленной установки на этот момент
+					boardConnector.writeRelayPosition(group.getRelayNumber(), group.getRelayPos());
+				}
 			}
 
-			if(workingStatus == WorkingStatus.WORKING) {
+			if(working()) {
 				handleStateChange();
 			} else {
+				turnOffAllRelays();
 				resetAllTemperatures();
 			}
-
 		}
 
+	}
+
+	private boolean working() {
+		return workingStatus == WorkingStatus.WORKING;
 	}
 
 	private void reloadSensor(Sensor sensor) {

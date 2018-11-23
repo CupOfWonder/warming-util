@@ -22,7 +22,11 @@ public class SensorGroup {
 	}
 
 	public void recountRelayPosition() {
-		int groupTemp = countGroupTemp();
+		Integer groupTemp = countGroupTemp();
+
+		if(groupTemp == null) {
+			return;
+		}
 
 		if(groupTemp < tempRange.getMinTemp()) {
 			switchToWarmingState();
@@ -47,7 +51,10 @@ public class SensorGroup {
 		relayPos = RelayPosition.OFF;
 	}
 
-	private int countGroupTemp() {
+	private Integer countGroupTemp() {
+		if(leftSensor.getRealTemp() == null || rightSensor.getRealTemp() == null) {
+			return null;
+		}
 		return (int) Math.round(((double) leftSensor.getRealTemp() + (double) rightSensor.getRealTemp())/2);
 	}
 
