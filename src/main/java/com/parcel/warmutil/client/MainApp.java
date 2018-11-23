@@ -34,15 +34,25 @@ public class MainApp extends Application {
 		stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 			@Override
 			public void handle(WindowEvent event) {
-				programState.handleProgramClose();
-				System.out.println("Program closed");
 				System.exit(0);
 			}
 		});
 
+		initShutdownHooks();
+
 		stage.setTitle("Управление нагревом");
 		stage.setScene(scene);
 		stage.show();
+	}
+
+	private void initShutdownHooks() {
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+			@Override
+			public void run() {
+				programState.handleProgramClose();
+				System.out.println("Program closed");
+			}
+		});
 	}
 
 }
