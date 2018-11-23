@@ -7,7 +7,12 @@ import com.parcel.warmutil.model.Sensor;
 import com.parcel.warmutil.model.helpers.ErrorCode;
 import com.parcel.warmutil.model.helpers.RelayPosition;
 
+import static com.parcel.warmutil.model.helpers.ThreadUtils.sleep;
+
 public class BoardConnector {
+
+	private static final int WRITE_ATTEMPT_COUNT = 5;
+
 	private Commutator commutator;
 
 	private String connectionStatus;
@@ -36,7 +41,16 @@ public class BoardConnector {
 
 	public synchronized void writeRelayPosition(int relayNum, RelayPosition pos) {
 		if(pos != null) {
-			commutator.relayWrite(relayNum, pos.isOn());
+			for(int i = 0; i < WRITE_ATTEMPT_COUNT; i++) {
+				int codeNum = commutator.relayWrite(relayNum, pos.isOn());
+				ErrorCode code = ErrorCode.byCode(codeNum);
+
+				if(code == ErrorCode.NO_ERROR) {
+					break;
+				}
+				sleep(100);
+			}
+
 		}
 	}
 }

@@ -26,8 +26,8 @@ public class Sensor {
 		this.correction = correction;
 	}
 
-	public void addTempFromSensor(int voltageOnSensor) {
-		sensorValues.add(voltageOnSensor);
+	public void addTempFromSensor(int tempOnSensor) {
+		sensorValues.add(tempOnSensor);
 		if(sensorValues.size() > MAX_SAVED_VALUES_COUNT) {
 			sensorValues.removeFirst();
 		}

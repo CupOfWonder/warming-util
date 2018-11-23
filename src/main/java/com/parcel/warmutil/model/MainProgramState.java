@@ -13,6 +13,7 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static com.parcel.warmutil.model.helpers.ThreadUtils.sleep;
 import static com.parcel.warmutil.model.options.DefaultOptionsCreator.createDefaultOptions;
 
 public class MainProgramState {
@@ -189,8 +190,12 @@ public class MainProgramState {
 	}
 
 	private void turnOffAllRelays() {
+		sleep(800);	//Ждем, пока остальные процессы завершатся
 		if(boardConnector.isConnected()) {
-			sensorGroups.forEach(g -> boardConnector.writeRelayPosition(g.getRelayNumber(), RelayPosition.OFF));
+			sensorGroups.forEach(g -> {
+
+				boardConnector.writeRelayPosition(g.getRelayNumber(), RelayPosition.OFF);
+			});
 		}
 	}
 
@@ -230,10 +235,10 @@ public class MainProgramState {
 	}
 
 	public void handleProgramClose() {
-		turnOffAllRelays();
 		if(refreshTimer != null) {
 			refreshTimer.cancel();
 		}
+		turnOffAllRelays();
 	}
 
 	public BoardStatus getBoardStatus() {
