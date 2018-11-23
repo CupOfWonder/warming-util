@@ -2,5 +2,7 @@ package com.parcel.warmutil.model.helpers;
 
 public enum WorkingStatus {
     NOT_WORKING,
-    WORKING;
+    STARTING,
+    WORKING,
+    STOPPING;
 }

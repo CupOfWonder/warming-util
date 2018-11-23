@@ -41,8 +41,12 @@ public class StringHelper {
 		switch (status) {
 			case WORKING:
 				return "Установка запущена";
+			case STARTING:
+				return "Запуск установки...";
 			case NOT_WORKING:
 				return "Установка не запущена";
+			case STOPPING:
+				return "Остановка...";
 			default:
 				throw new IllegalArgumentException("Working status "+status+ " not supported");
 		}

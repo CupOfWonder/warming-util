@@ -7,6 +7,7 @@ import com.parcel.warmutil.model.helpers.RelayPosition;
 import com.parcel.warmutil.model.helpers.StateChangeHandler;
 import com.parcel.warmutil.model.helpers.WorkingStatus;
 import com.parcel.warmutil.model.options.*;
+import javafx.application.Platform;
 
 import java.util.*;
 import java.util.logging.Level;
@@ -142,6 +143,7 @@ public class MainProgramState {
 
 		if(!boardConnector.isConnected()) {
 			boardStatus = BoardStatus.CONNECTING;
+			refreshWorkingStatus(WorkingStatus.STARTING);
 			boardConnector.connectToBoard();
 		}
 
@@ -159,6 +161,7 @@ public class MainProgramState {
 			refreshWorkingStatus(WorkingStatus.WORKING);
 		} else { ;
 			boardStatus = BoardStatus.NOT_CONNECTED;
+			refreshWorkingStatus(WorkingStatus.NOT_WORKING);
 		}
 
 	}
@@ -237,7 +240,12 @@ public class MainProgramState {
 
 	private void refreshWorkingStatus(WorkingStatus status) {
 		this.workingStatus = status;
-		handleStateChange();
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				handleStateChange();
+			}
+		});
 	}
 
 	public WorkingStatus getWorkingStatus() {

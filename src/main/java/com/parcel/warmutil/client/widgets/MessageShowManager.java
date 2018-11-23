@@ -1,6 +1,7 @@
 package com.parcel.warmutil.client.widgets;
 
 import javafx.animation.FadeTransition;
+import javafx.application.Platform;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
@@ -25,23 +26,25 @@ public class MessageShowManager {
     }
 
     private void showMessage(Label label, String message) {
-        label.setText(message);
+        Platform.runLater(() -> {
+			label.setText(message);
 
-        FadeTransition transition = new FadeTransition();
-        transition.setNode(label);
-        transition.setDuration(Duration.millis(APPEAR_DURATION));
-        transition.setFromValue(0);
-        transition.setToValue(1);
+			FadeTransition transition = new FadeTransition();
+			transition.setNode(label);
+			transition.setDuration(Duration.millis(APPEAR_DURATION));
+			transition.setFromValue(0);
+			transition.setToValue(1);
 
-        transition.play();
+			transition.play();
 
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                hideMessage(label);
-            }
-        }, SHOW_DURATION);
+			Timer timer = new Timer();
+			timer.schedule(new TimerTask() {
+				@Override
+				public void run() {
+					hideMessage(label);
+				}
+			}, SHOW_DURATION);
+		});
     }
 
     private void hideMessage(Label label) {

@@ -17,6 +17,7 @@ import com.parcel.warmutil.model.options.TempRangeOptions;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
@@ -29,6 +30,8 @@ import static com.parcel.warmutil.client.helpers.StringHelper.temperatureString;
 public class MainAppController {
 
 	private TableEditFinisher editFinisher = TableEditFinisher.getInstance();
+
+	private Thread startingThread;
 
 	@FXML
 	public TableView<SensorGroup> monitoringTable;
@@ -59,7 +62,7 @@ public class MainAppController {
 	public TableColumn<CalibrationOptions, Integer> calibrationLeftSensor, calibrationRightSensor;
 
 	@FXML
-	private Button startWarming;
+	private Button startWarming, stopWarming;
 
 	@FXML
 	private Label monitoringMessage, tempMessage, calibrationMessage, workingStatusLabel;
@@ -110,6 +113,21 @@ public class MainAppController {
 				WorkingStatus status = state.getWorkingStatus();
 				workingStatusLabel.setText(StringHelper.textForWorkingStatus(status));
 				workingStatusLabel.setTextFill(StyleHelper.colorForWorkingStatus(status));
+
+				switch (status) {
+					case NOT_WORKING:
+						stopWarming.setDisable(true);
+						startWarming.setDisable(false);
+						break;
+					case STARTING:
+						stopWarming.setDisable(true);
+						startWarming.setDisable(true);
+						break;
+					case WORKING:
+						stopWarming.setDisable(false);
+						startWarming.setDisable(true);
+						break;
+				}
 			}
 		});
 	}
@@ -241,12 +259,21 @@ public class MainAppController {
 	}
 
 	public void onStartClick(MouseEvent mouseEvent) {
-		programState.startWorking();
+		Task<Void> task = new Task<Void>() {
+			@Override
+			protected Void call() throws Exception {
+				programState.startWorking();
 
-		BoardStatus status = programState.getBoardStatus();
-		if(status != BoardStatus.CONNECTED) {
-			messageShowManager.showError(monitoringMessage, "Не удалось подключиться к плате");
-		}
+				BoardStatus status = programState.getBoardStatus();
+				if(status != BoardStatus.CONNECTED) {
+					messageShowManager.showError(monitoringMessage, "Не удалось подключиться к плате");
+				}
+
+				return null;
+			}
+		};
+		Thread th = new Thread(task);
+		th.start();
 	}
 
 	public void onStopClick(MouseEvent mouseEvent) {
