@@ -34,4 +34,13 @@ public class ResistanceOptions {
 	public void setRightResistance(double rightResistance) {
 		this.rightResistance = rightResistance;
 	}
+
+	@Override
+	public String toString() {
+		return "ResistanceOptions{" +
+				"groupNumber=" + groupNumber +
+				", leftResistance=" + leftResistance +
+				", rightResistance=" + rightResistance +
+				'}';
+	}
 }

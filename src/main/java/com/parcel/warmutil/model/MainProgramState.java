@@ -39,9 +39,9 @@ public class MainProgramState {
 	private BoardConnector boardConnector;
 
 	private MainProgramState() {
-		addSensorGroup(0, 14, 15);
-		addSensorGroup(1, 16, 17);
-		addSensorGroup(2, 18, 19);
+		addSensorGroup(12, 14, 15);
+		addSensorGroup(13, 16, 17);
+		addSensorGroup(14, 18, 19);
 
 		tryLoadOptions();
 		boardConnector = new BoardConnector(currentOptions.getBoardName());
@@ -152,14 +152,16 @@ public class MainProgramState {
 			boardStatus = BoardStatus.CONNECTED;
 			turnOffAllRelays();
 
-			refreshTimer = new Timer();
-			refreshTimer.schedule(new TimerTask() {
-				@Override
-				public void run() {
-					refreshProgramState();
-				}
-			}, 0, REFRESH_PERIOD);
-			refreshWorkingStatus(WorkingStatus.WORKING);
+			Platform.runLater(() -> {
+				refreshTimer = new Timer();
+				refreshTimer.schedule(new TimerTask() {
+					@Override
+					public void run() {
+						refreshProgramState();
+					}
+				}, 0, REFRESH_PERIOD);
+				refreshWorkingStatus(WorkingStatus.WORKING);
+			});
 		} else { ;
 			boardStatus = BoardStatus.NOT_CONNECTED;
 			refreshWorkingStatus(WorkingStatus.NOT_WORKING);
@@ -178,6 +180,7 @@ public class MainProgramState {
 			refreshTimer.cancel();
 		 	refreshTimer = null;
 
+			sleep(800);	//Ждем, пока остальные процессы завершатся
 		 	turnOffAllRelays();
 		 	resetAllTemperatures();
 
@@ -190,7 +193,6 @@ public class MainProgramState {
 	}
 
 	private void turnOffAllRelays() {
-		sleep(800);	//Ждем, пока остальные процессы завершатся
 		if(boardConnector.isConnected()) {
 			sensorGroups.forEach(g -> {
 
@@ -238,6 +240,7 @@ public class MainProgramState {
 		if(refreshTimer != null) {
 			refreshTimer.cancel();
 		}
+		sleep(800);	//Ждем, пока остальные процессы завершатся
 		turnOffAllRelays();
 	}
 

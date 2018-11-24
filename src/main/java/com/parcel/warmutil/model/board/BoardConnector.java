@@ -13,7 +13,7 @@ public class BoardConnector {
 
 	private static final int WRITE_ATTEMPT_COUNT = 5;
 
-	private Commutator commutator;
+	private volatile Commutator commutator;
 
 	private String connectionStatus;
 
