@@ -47,6 +47,8 @@ public class StringHelper {
 				return "Установка не запущена";
 			case STOPPING:
 				return "Остановка...";
+			case RECONNECTING:
+				return "Соединение с платой утеряно. Попытка переподключения...";
 			default:
 				throw new IllegalArgumentException("Working status "+status+ " not supported");
 		}

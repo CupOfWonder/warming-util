@@ -2,10 +2,7 @@ package com.parcel.warmutil.model;
 
 import com.parcel.warmutil.model.board.BoardConnector;
 import com.parcel.warmutil.model.board.BoardStatus;
-import com.parcel.warmutil.model.helpers.ErrorCode;
-import com.parcel.warmutil.model.helpers.RelayPosition;
-import com.parcel.warmutil.model.helpers.StateChangeHandler;
-import com.parcel.warmutil.model.helpers.WorkingStatus;
+import com.parcel.warmutil.model.helpers.*;
 import com.parcel.warmutil.model.options.*;
 import javafx.application.Platform;
 
@@ -30,7 +27,9 @@ public class MainProgramState {
 	private List<SensorGroup> sensorGroups = new ArrayList<>();
 
 	private Timer refreshTimer;
+	private Timer reconnectTimer;
 	private static final int REFRESH_PERIOD = 1000;
+	private static final int RECONNECT_PERIOD = 5000;
 
 	private BoardStatus boardStatus;
 	private volatile WorkingStatus workingStatus = WorkingStatus.NOT_WORKING;
@@ -44,7 +43,15 @@ public class MainProgramState {
 		addSensorGroup(14, 18, 19);
 
 		tryLoadOptions();
+		initBoardConnector();
+	}
+
+	private void initBoardConnector() {
 		boardConnector = new BoardConnector(currentOptions.getBoardName());
+		boardConnector.addLostConnectionHandler(() -> {
+			boardStatus = BoardStatus.NOT_CONNECTED;
+			switchToReconnectMode();
+		});
 	}
 
 	private void tryLoadOptions() {
@@ -138,7 +145,7 @@ public class MainProgramState {
 	}
 
 	public void startWorking() {
-		if(workingStatus == WorkingStatus.WORKING) {
+		if(working()) {
 			return;
 		}
 
@@ -150,23 +157,34 @@ public class MainProgramState {
 
 		if(boardConnector.isConnected()) {
 			boardStatus = BoardStatus.CONNECTED;
-			turnOffAllRelays();
-
-			Platform.runLater(() -> {
-				refreshTimer = new Timer();
-				refreshTimer.schedule(new TimerTask() {
-					@Override
-					public void run() {
-						refreshProgramState();
-					}
-				}, 0, REFRESH_PERIOD);
-				refreshWorkingStatus(WorkingStatus.WORKING);
-			});
-		} else { ;
+			startSensorStateRefresh();
+		} else {
 			boardStatus = BoardStatus.NOT_CONNECTED;
 			refreshWorkingStatus(WorkingStatus.NOT_WORKING);
 		}
+	}
 
+	private void startSensorStateRefresh() {
+		turnOffAllRelays();
+
+		Platform.runLater(() -> {
+			refreshTimer = new Timer();
+			refreshTimer.schedule(new TimerTask() {
+				@Override
+				public void run() {
+					refreshProgramState();
+				}
+			}, 0, REFRESH_PERIOD);
+			refreshWorkingStatus(WorkingStatus.WORKING);
+			turnOffReconnectTimer();
+		});
+	}
+
+	private void turnOffReconnectTimer() {
+		if(reconnectTimer != null) {
+			reconnectTimer.cancel();
+			reconnectTimer = null;
+		}
 	}
 
 	public void stopWorking() {
@@ -186,6 +204,29 @@ public class MainProgramState {
 
 		 	handleStateChange();
 		}
+		if(reconnectTimer != null) {
+			reconnectTimer.cancel();
+			reconnectTimer = null;
+		}
+	}
+
+	private void switchToReconnectMode() {
+		if(refreshTimer != null) {
+			refreshTimer.cancel();
+			refreshTimer = null;
+		}
+		refreshWorkingStatus(WorkingStatus.RECONNECTING);
+		TimerTask task = new TimerTask() {
+			@Override
+			public void run() {
+				boardConnector.connectToBoard();
+
+				if(boardConnector.isConnected()) {
+					startSensorStateRefresh();
+				}
+			}
+		};
+		reconnectTimer.schedule(task, 0, RECONNECT_PERIOD);
 	}
 
 	private void resetAllTemperatures() {

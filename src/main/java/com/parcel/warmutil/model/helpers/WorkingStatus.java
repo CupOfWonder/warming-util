@@ -4,5 +4,6 @@ public enum WorkingStatus {
     NOT_WORKING,
     STARTING,
     WORKING,
+    RECONNECTING,
     STOPPING;
 }
