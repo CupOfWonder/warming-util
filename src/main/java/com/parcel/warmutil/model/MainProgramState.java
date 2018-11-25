@@ -145,23 +145,50 @@ public class MainProgramState {
 	}
 
 	public void startWorking() {
-		if(working()) {
-			return;
-		}
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				for(SensorGroup group : sensorGroups) {
+					if(group.getGroupNumber() == 1) {
+						group.getLeftSensor().addTempFromSensor(201);
+						group.getRightSensor().addTempFromSensor(205);
+						group.recountRelayPosition();
+					}
+					if(group.getGroupNumber() == 2) {
+						group.getLeftSensor().addTempFromSensor(198);
+						group.getRightSensor().addTempFromSensor(203);
+						group.recountRelayPosition();
+					}
+					if(group.getGroupNumber() == 3) {
+						group.getLeftSensor().addTempFromSensor(202);
+						group.getRightSensor().addTempFromSensor(204);
+						group.recountRelayPosition();
+					}
 
-		if(!boardConnector.isConnected()) {
-			boardStatus = BoardStatus.CONNECTING;
-			refreshWorkingStatus(WorkingStatus.STARTING);
-			boardConnector.connectToBoard();
-		}
+				}
+				refreshWorkingStatus(WorkingStatus.WORKING);
+				handleStateChange();
 
-		if(boardConnector.isConnected()) {
-			boardStatus = BoardStatus.CONNECTED;
-			startSensorStateRefresh();
-		} else {
-			boardStatus = BoardStatus.NOT_CONNECTED;
-			refreshWorkingStatus(WorkingStatus.NOT_WORKING);
-		}
+			}
+		});
+
+//		if(working()) {
+//			return;
+//		}
+//
+//		if(!boardConnector.isConnected()) {
+//			boardStatus = BoardStatus.CONNECTING;
+//			refreshWorkingStatus(WorkingStatus.STARTING);
+//			boardConnector.connectToBoard();
+//		}
+//
+//		if(boardConnector.isConnected()) {
+//			boardStatus = BoardStatus.CONNECTED;
+//			startSensorStateRefresh();
+//		} else {
+//			boardStatus = BoardStatus.NOT_CONNECTED;
+//			refreshWorkingStatus(WorkingStatus.NOT_WORKING);
+//		}
 	}
 
 	private void startSensorStateRefresh() {

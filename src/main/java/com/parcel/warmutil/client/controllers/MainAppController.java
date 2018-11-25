@@ -7,7 +7,6 @@ import com.parcel.warmutil.client.widgets.table.CalibrationEditCell;
 import com.parcel.warmutil.client.widgets.table.TemperatureEditCell;
 import com.parcel.warmutil.model.MainProgramState;
 import com.parcel.warmutil.model.SensorGroup;
-import com.parcel.warmutil.model.board.BoardStatus;
 import com.parcel.warmutil.model.events.TableEditFinisher;
 import com.parcel.warmutil.model.helpers.StateChangeHandler;
 import com.parcel.warmutil.model.helpers.WarmingState;
@@ -264,10 +263,10 @@ public class MainAppController {
 			protected Void call() throws Exception {
 				programState.startWorking();
 
-				BoardStatus status = programState.getBoardStatus();
-				if(status != BoardStatus.CONNECTED) {
-					messageShowManager.showError(monitoringMessage, "Не удалось подключиться к плате");
-				}
+//				BoardStatus status = programState.getBoardStatus();
+//				if(status != BoardStatus.CONNECTED) {
+//					messageShowManager.showError(monitoringMessage, "Не удалось подключиться к плате");
+//				}
 
 				return null;
 			}
